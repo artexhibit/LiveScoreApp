@@ -1,7 +1,5 @@
 package ru.igorcodes.livescoreapp.viewmodel
 
-import android.os.Build
-import androidx.annotation.RequiresExtension
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel

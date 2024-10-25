@@ -16,6 +16,14 @@ import ru.igorcodes.livescoreapp.util.RequestInterceptor
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    private fun buildRetrofit(okHttpClient: OkHttpClient, baseUrl: String): Retrofit {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(baseUrl)
+            .build()
+    }
+
     @Provides
     fun okHttp(): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
@@ -23,17 +31,7 @@ object NetworkModule {
     }
 
     @Provides
-    fun retrofit(okHttpClient: OkHttpClient): Retrofit.Builder {
-        return Retrofit.Builder()
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-    }
-
-    @Provides
-    fun sportsDBApiService(retrofitBuilder: Retrofit.Builder, baseUrl: String): SportsDBApiService {
-        return retrofitBuilder
-            .baseUrl(baseUrl)
-            .build()
-            .create(SportsDBApiService::class.java)
+    fun sportsDBApiService(okHttpClient: OkHttpClient): SportsDBApiService {
+        return buildRetrofit(okHttpClient, BASE_URL).create(SportsDBApiService::class.java)
     }
 }
